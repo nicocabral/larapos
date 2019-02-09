@@ -1,0 +1,21 @@
+.parsley-errors-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 5px;
+  color: red;
+}
+.parsley-error-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 5px;
+  color: red;
+}
+
+body {
+    color: #555555 !important;
+    background: #fafafa;
+}
+.card {
+	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.12),
+            0 2px 4px 0 rgba(0,0,0,0.08);
+}
