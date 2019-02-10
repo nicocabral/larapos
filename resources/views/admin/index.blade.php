@@ -38,7 +38,7 @@
 			<div class="card-body">
 				<h5><i class="fas fa-clipboard-list"></i> Today Sales</h5>
 				<br>
-				<table class="table table-hover table-striped">
+				<table class="table table-hover table-striped" width="100%" id="salesTable">
 					<thead>
 						<tr>
 							<th>ID</th>
@@ -56,50 +56,37 @@
 
 @section('js')
 <script>
+	var totalQtySold = ''.totalSalesAmount = '';
 	$(document).ready(function(){
-		renderChart();
-	    // render()
-	    // .then(ret => {
-
-	    //     if(ret) {
-	    //         renderChart();
-	    //     }
-	    // });
+		dashboard().then(ok => {
+			renderChart();
+		});
+		
 	})
-	// function render(){
-	//     return new Promise(async r => {
-	//         var ret = await getData();
-	//         if(ret) {
-	//            r(true);
 
-	//         }
-	//     })
-	// }
-	// function getData() {
-	//     return new Promise(r => {
-
-	//         $.get('/ses/api/dashboard/dashboard.php',{}, function(res){
-	//             if(res.success) {
-	//                 renderChart(res.items.students.totalStudents,res.items.users.totalUsers);
-	//                 $(".noStudents").html(res.items.students.totalStudents);
-	//                 $(".noUsers").html(res.items.users.totalUsers);
-	//             }
-	//         })
-	//         r(true);
-	//     })
-	// }
-
+	function dashboard(){
+		return new Promise(resolve =>{
+			$.get("{{route('api.dashboard')}}", function(res) {
+				if(res.success) {
+					totalQtySold = res.totalQtySold;
+					totalSalesAmount = res.totalSalesAmount;
+					resolve(true);
+				}
+			});
+		})
+	}
 	function renderChart(students,users){
-
+		var labelKeys = Object.keys(totalQtySold);
+		console.log(labelKeys)
 	    var productSales = document.getElementById("productSales");
 	    var productTotalSales = document.getElementById("productTotalSales");
 	  	new Chart(productSales, {
 	        type: 'bar',
 	        data: {
-	            labels: ["Today","Last 7 Days", "Last 14 Days", "Last 30 Days"],
+	            labels: labelKeys,
 	            datasets: [{
 	                label: 'Quantity',
-	                data: [12,25,13,6],
+	                data: [totalQtySold[labelKeys[0]],totalQtySold[labelKeys[1]],totalQtySold[labelKeys[2]],totalQtySold[labelKeys[3]]],
 	                backgroundColor: [
 	                    'rgb(21, 140, 186)',
 	                    'rgb(191, 191, 63)',
@@ -124,11 +111,11 @@
 	  	new Chart(productTotalSales, {
 	  		 type: 'line',
 		        data: {
-		            labels: ["Today","Last 7 Days", "Last 14 Days", "Last 30 Days"],
+		            labels: labelKeys,
 		            datasets: [{
 		                label: 'Amount',
 		                fill: false,
-		                data: [1000,5000,4000,2500],
+		                data: [totalSalesAmount[labelKeys[0]],totalSalesAmount[labelKeys[1]],totalSalesAmount[labelKeys[2]],totalSalesAmount[labelKeys[3]]],
 		                backgroundColor: [
 		                    'rgb(21, 140, 186)',
 		               
@@ -155,6 +142,32 @@
 		        }
 	  	});
 	}
+
+	var table = $("#salesTable").DataTable({
+		processing: true,
+		serverSide: true,
+		destroy: true,
+		ajax: {
+			url : "{{route('api.pos-saleslist')}}",
+			method: 'get',
+			cache:false,
+		},
+		columns: [
+			{data: "id", name: "id"},
+			{data: "total", name: "total",
+				"render": function(data) {
+					return numeral(data).format('0,0.00');
+				}
+			},
+			{data: "status",name:"status",
+
+				"render":function(data) {
+					var c = data == "Paid" ? "success" : "info";
+					return '<span class="badge badge-pill badge-'+c+'">'+data+'</span>';
+				}
+			}
+		]
+	})
 </script>
 	
 @endsection

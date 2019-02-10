@@ -94,6 +94,12 @@
 <script src="{{asset('assets/datatable/js/buttons.html5.min.js')}}"></script>
 <script src="{{asset('assets/datatable/js/buttons.print.min.js')}}"></script>
 <script>
+	$(document).ready(function(){
+		$(".datepicker").datepicker({
+			autoclose: true,
+			format: 'yyyy-mm-dd'
+		})
+	})
 	$(document).on('click','.btnAdd', function(){
 		$('#itemModal').modal('show');
 	});
@@ -362,6 +368,11 @@
             row.child( format(row.data()) ).show();
             tr.addClass('shown');
         }
+    });
+
+    $(document).on("change",'.filterSales', function() {
+    	var val = $(this).val();
+    	salesTable.ajax.url( '{{route("api.pos-saleslistfilter","1")}}'.replace("1",val) ).load();
     });
 </script>
 

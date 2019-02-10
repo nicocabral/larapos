@@ -19,7 +19,7 @@ Route::get('/', function () {
 	return view('auth.index');
     
 })->name('index');
-
+Route::get('/forgotpassword', 'Auth\ForgotPasswordController@index')->name('forgotpassword');
 Route::group(['middleware' => 'isLogin'], function() {
 	Route::get('/products','Admin\Products@index')->name('products');
 	Route::get('/categories', 'Admin\Categories@index')->name('categories');

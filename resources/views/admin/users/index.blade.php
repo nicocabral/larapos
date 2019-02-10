@@ -87,6 +87,7 @@
 		$("#userForm").trigger("reset");
 		$("#userForm").removeAttr('method');
 		$(".modal-title").text("Add User");
+		$(".btnResetPassword").hide();
 		$("#modal").modal("show");
 	});
 
@@ -105,6 +106,7 @@
 				}
 				
 			})
+			typeof payload["status"] === "undefined" ? payload.status = "Inactive" : "";
 			var url = that.attr('method') == 'put' ? "{{route('api.users-update','1')}}".replace('1',that.attr('data-id')) : "{{route('api.users-create')}}";
 			$.ajax({
 				url : url,
@@ -116,12 +118,17 @@
 					if(res.success) {
 						$(that).parsley().reset();
 						$(that).trigger("reset");
-						swal({
-							text: res.message+'\n'+'Username: '+res.userData.username+'\nPassword: '+res.userData.password,
+						table.ajax.reload();
+						return swal({
+							text: res.message,
 							icon: "success"
 						})
-						table.ajax.reload();
+						
 					}
+					return swal({
+						text: res.message,
+						icon: "warning"
+					})
 				}
 			})
 		}
@@ -194,8 +201,45 @@
 			}
 			$(".modal-title").text("Update User");
 			$("#userForm").attr('method','put').attr('data-id',id);
+			$(".btnResetPassword").show();
 			$("#modal").modal('show');
 		})
 	})
+
+	$(document).on('click', '.btnResetPassword', function() {
+		var id = $("#userForm").attr('data-id');
+		swal({
+			text: "Are you sure you want to reset "+$("input[name=first_name]").val()+" password?",
+			icon: "warning",
+			buttons : [
+				"Cancel", 
+				{
+					text: "Reset",
+					closeModal: false
+				}
+			],
+			dangerMode: true
+		}).then(reset => {
+			$.ajax({
+				url : "{{route('api.users-resetpassword','1')}}".replace('1',id),
+				method: 'patch',
+				data: {_token:token},
+				cache: false,
+				success: function(res) {
+					if(res.success) {
+						$("#modal").modal('hide');
+						return swal({
+							text : res.message, 
+							icon: "success"
+						})
+					} 
+					swal({
+						text: res.message,
+						icon:"warning"
+					});
+				}
+			})
+		});
+	});
 </script>
 @endsection

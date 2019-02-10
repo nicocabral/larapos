@@ -9,6 +9,14 @@
       </div>
       <div class="modal-body loader">
         <div class="row">
+          <div class="col-md-9">
+            <h6 class="float-right mt-2"><strong><i class="fas fa-filter"></i> Filter by</strong></h6>
+          </div>
+          <div class="col-md-3">
+           <input type="text" class="form-control datepicker filterSales" name="filterSales">
+          </div>
+        </div>
+        <div class="row">
           <div class="col-md-12">
             <table class="table table-condensed table-hover table-striped" width="100%" id="salesTable">
               <thead>

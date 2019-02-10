@@ -49,7 +49,8 @@ class POS extends Controller
     			"ref_description" => $value["description"],
     			"ref_qty" => $value["selected_qty"],
     			"ref_price" => $value["price"],
-    			"ref_total" => $value["total"]
+    			"ref_total" => $value["total"],
+                "created_at" =>  Carbon::today()->toDateString()
     		]);
     		Product::whereId($value["id"])->update(["qty" => $value["qty"] - $value["selected_qty"]]);
     	}
@@ -58,7 +59,38 @@ class POS extends Controller
 
     }
 
-    public function salesList() {
-    	return DataTables::of(Sale::with("items")->get())->make(true);
+    public function salesList($filter = null) {
+        $date = Carbon::today();
+        $today = $filter == null ? $date->toDateString() : $filter;
+     
+    	return DataTables::of(Sale::with("items")->where("date",$today)->get())->make(true);
+    }
+
+    public function dashboard(){
+        $date = Carbon::today();
+        $today = $date->toDateString();
+        $todayQuery = SaleItems::where('created_at',$today);
+        $lastWeek = $date->subDays(7)->toDateString();
+        $last2Week = $date->subDays(14)->toDateString();
+        $last30days = $date->subDays(30)->toDateString();
+        $lastWeekQuery = SaleItems::whereBetween('created_at', [$lastWeek, $today]);
+        $last2WeekQuery = SaleItems::whereBetween('created_at', [$last2Week, $today]);
+        $last30daysQuery = SaleItems::whereBetween('created_at', [$last30days, $today]);
+
+        $this->return = ["success" => true, "totalQtySold" => 
+                                            ["Today" => $todayQuery->sum('ref_qty'), 
+                                             "Last 7 Days" => $lastWeekQuery->sum('ref_qty'), 
+                                             "Last 14 Days" => $last2WeekQuery->sum('ref_qty'),
+                                             "Last 30 Days" =>$last30daysQuery->sum('ref_qty')
+                                            ],
+                                            "totalSalesAmount" => [
+                                                "Today" => $todayQuery->sum('ref_total'), 
+                                                 "Last 7 Days" => $lastWeekQuery->sum('ref_total'), 
+                                                 "Last 14 Days" => $last2WeekQuery->sum('ref_total'),
+                                                 "Last 30 Days" =>$last30daysQuery->sum('ref_total')
+                                                
+                                            ]
+                        ];
+        return response()->json($this->return);
     }
 }

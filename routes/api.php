@@ -28,6 +28,7 @@ Route::group(['middleware' => 'isLogin'], function(){
 	//Sale
 	Route::post('/pos/create', 'Admin\POS@create')->name('api.pos-create');
 	Route::get('/pos/sales/list','Admin\POS@salesList')->name('api.pos-saleslist');
+	Route::get('/pos/sales/list/{filter}','Admin\POS@salesList')->name('api.pos-saleslistfilter');
 
 	//User
 	Route::get('/users','Admin\Users@datatable')->name('api.users');
@@ -35,4 +36,9 @@ Route::group(['middleware' => 'isLogin'], function(){
 	Route::get('/users/{id}','Admin\Users@read')->name('api.users-read');
 	Route::put('/users/{id}','Admin\Users@update')->name('api.users-update');
 	Route::delete('/users/{id}','Admin\Users@delete')->name('api.users-delete');
+	Route::patch('/users/reset-password/{id}','Admin\Users@resetPassword')->name('api.users-resetpassword');
+	Route::put('/users/myaccount/update', 'Admin\Users@updateMyaccount')->name('api.users-updatemyaccount');
+
+	//dashboard
+	Route::get('/sales/dashboard','Admin\POS@dashboard')->name('api.dashboard');
 });

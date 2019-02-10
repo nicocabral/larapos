@@ -45,6 +45,9 @@ class Users extends Controller
     	if(!$validate) {
     		$this->password = $this->genPassword();
     		$this->username = $request["first_name"].'.'.$request["last_name"];
+    		if(User::whereUsername($this->username)->first()) {
+    			return response()->json(["success" => false, "message" => "User already exist"]);
+    		}
     		$user = new User;
     		$user->username  = $this->username;
     		$user->first_name = $request["first_name"];
@@ -53,7 +56,7 @@ class Users extends Controller
     		$user->status      = $request["status"];
     		$user->password   = bcrypt($this->password);
     		$userdata = ["username" => $this->username, "password" => $this->password];
-    		$this->return = $user->save() ? ["success" => true, "message" => "Save successfully!", "userData"=>$userdata] : ["success" => false, "message" => "Save failed"];
+    		$this->return = $user->save() ? ["success" => true, "message" => "Username : ".$this->username. "\nPassword : ".$this->password, "userData"=>$userdata] : ["success" => false, "message" => "Save failed"];
     		return response()->json($this->return);
     	}
     	return response()->json(["success" => false, "message" =>$validate]);
@@ -65,7 +68,13 @@ class Users extends Controller
 
 
     public function update(Request $request,$id) {
-
+    	$validate = $this->rules($request->all());
+    	if(!$validate) {
+    		$user = User::whereId($id)->update(["first_name" => $request["first_name"], "last_name" => $request["last_name"], "contact_number" => $request["contact_number"], "status" => $request["status"]]);
+    		$this->return = $user ? ["success" => true, "message" => "Save successfully!"] : ["success" => false, "message" => "Save failed"];
+    		return response()->json($this->return);
+    	}
+    	return response()->json(["success" => false, "message" =>$validate]);
     }
 
     public function delete($id) {
@@ -77,5 +86,22 @@ class Users extends Controller
     public function genPassword($args = null){
 		$this->password = $args ? $args : uniqid(mt_rand());
 	    return '_'.substr(base_convert(sha1($this->password), 16, 36), 0, 8);
+	}
+
+	public function resetPassword($id) {
+		$this->password = $this->genPassword();
+		$user = User::whereId($id)->update(["password" => bcrypt($this->password)]);
+		$this->return = $user ? ["success" => true, "message" => "New password : ".$this->password] : ["success" => false, "message" => "Reset failed"];
+		return response()->json($this->return);
+	}
+
+	public function updateMyaccount(Request $request) {
+		$user = User::whereId(Auth::user()->id)->update(["first_name" => $request["first_name"], 
+														 "last_name" => $request["last_name"],
+														 "contact_number" => $request["contact_number"],
+														 "status" => $request["status"],
+														 "username" => $request["username"]]);
+		$this->return = $user ? ["success" => true, "message" => "Updated successfully!"] : ["success" => false, "message" => "Update failed"];
+		return response()->json($this->return);
 	}
 }

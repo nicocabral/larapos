@@ -51,6 +51,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary btnSave" data-loading-text="<i class='fas fa-circle-notch fa-spin'></i> Saving...">Save</button>
+        <button type="button" class="btn btn-danger btnResetPassword" data-loading-text="<i class='fas fa-circle-notch fa-spin'></i> Resetting...">Reset password</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
