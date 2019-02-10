@@ -23,4 +23,6 @@ Route::get('/', function () {
 Route::group(['middleware' => 'isLogin'], function() {
 	Route::get('/products','Admin\Products@index')->name('products');
 	Route::get('/categories', 'Admin\Categories@index')->name('categories');
+	Route::get('/pos', 'Admin\POS@index')->name('pos');
+	Route::get('/users', 'Admin\Users@index')->name('users');
 });

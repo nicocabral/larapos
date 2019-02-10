@@ -24,4 +24,15 @@ Route::group(['middleware' => 'isLogin'], function(){
 	Route::get('/categories/{id}', 'Admin\Categories@read')->name('api.cat-read');
 	Route::put('/categories/{id}', 'Admin\Categories@update')->name('api.cat-update');
 	Route::delete('/categories/{id}', 'Admin\Categories@delete')->name('api.cat-delete');
+
+	//Sale
+	Route::post('/pos/create', 'Admin\POS@create')->name('api.pos-create');
+	Route::get('/pos/sales/list','Admin\POS@salesList')->name('api.pos-saleslist');
+
+	//User
+	Route::get('/users','Admin\Users@datatable')->name('api.users');
+	Route::post('/users/create','Admin\Users@create')->name('api.users-create');
+	Route::get('/users/{id}','Admin\Users@read')->name('api.users-read');
+	Route::put('/users/{id}','Admin\Users@update')->name('api.users-update');
+	Route::delete('/users/{id}','Admin\Users@delete')->name('api.users-delete');
 });

@@ -121,7 +121,7 @@
 					}
 					
 				});
-
+				typeof payload["status"] == "undefined" ? payload["status"] = "Inactive" : '';
 				var url = that.attr('method') == 'put' ? "{{route('api.product-update','1')}}".replace('1',that.attr('data-id')) : '{{route("api.product-create")}}';
 				$.ajax({
 					url : url,
@@ -191,10 +191,14 @@
 					if(keys.length>0) {
 						keys.map(val => {
 							
-							if(val == "status" && res.data[val] == "Active") {
-								$(".status").prop( "checked", true );
+							if(val == "status") {
+								var checked = false;
+								if(res.data[val] == "Active") {
+									checked = true;
+								}
+								$(".status").prop( "checked", checked );
 							} else {
-								$(".status").prop( "checked", false );
+								
 								$("[name="+val+"]",frm).val(res.data[val]);
 							}
 						});

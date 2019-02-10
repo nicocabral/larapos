@@ -44,3 +44,5 @@ $(document).on('click','a',function(){
 	$('[data-toggle="tooltip"]').tooltip('hide');
 })
 
+
+

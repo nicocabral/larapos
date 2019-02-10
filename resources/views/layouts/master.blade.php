@@ -7,6 +7,7 @@
 	<link rel="stylesheet" href="{{asset('assets/datatable/css/dataTables.bootstrap4.min.css')}}">
 	<link rel="stylesheet" href="{{asset('assets/css/custom.css')}}">
 	<meta name="token" content="{{ csrf_token() }}">
+	@yield('css')
 	<body>
 		@include('includes.navs')
 	
@@ -43,6 +44,25 @@
 				$(this).addClass('active').not(this).removeClass('active');
 			}
 		})
+		$(document).on('click','.btnLogout', function(){
+		swal({
+			title: "Confirmation",
+			text: "Are you sure you want to logout?",
+			icon: "warning",
+			buttons: [
+				"Cancel",
+				{
+					text:"Logout",
+					closeModal: false
+				}
+			],
+			dangerMode: true
+		}).then(logout => {
+			if(logout) {
+				window.location.href="{{route('api.logout')}}";
+			}
+		});
+	});
 	</script>
 		@yield('script')
 		@yield('js')

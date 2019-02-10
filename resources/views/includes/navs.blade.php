@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary nav-gradient">
   <a class="navbar-brand " href="/ses/portal/views/"  >
     <img src="{{asset('assets/img/brand.png')}}" alt="" class="img-fluid">
   </a>
@@ -17,11 +17,11 @@
       <li class="nav-item " data-href="categories">
         <a class="nav-link" href="{{route('categories')}}"><img src="{{asset('assets/img/cat.png')}}" alt="Category" class="img-fluid"> Category</a>
       </li>
-      <li class="nav-item " data-href="sales">
-        <a class="nav-link" href="#"><img src="{{asset('assets/img/sales.png')}}" alt="Sales" class="img-fluid"> Sales</a>
+      <li class="nav-item " data-href="pos">
+        <a class="nav-link" href="{{route('pos')}}"><img src="{{asset('assets/img/sales.png')}}" alt="Sales" class="img-fluid"> Point of Sale</a>
       </li>
       <li class="nav-item " data-href="users">
-        <a class="nav-link" href="#"><img src="{{asset('assets/img/users.png')}}" alt="Users" class="img-fluid"> Users</a>
+        <a class="nav-link" href="{{route('users')}}"><img src="{{asset('assets/img/users.png')}}" alt="Users" class="img-fluid"> Users</a>
       </li>
     </ul>
     
