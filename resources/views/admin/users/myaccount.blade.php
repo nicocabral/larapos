@@ -46,8 +46,8 @@
                 <label class="col-sm-2 col-form-label float-right"><strong>STATUS</strong></label>
                 <div class="col-sm-8">
                   <div class="custom-control custom-checkbox mt-2">
-                    <input type="checkbox" name="status" class="custom-control-input status" id="customCheck1" {!! Auth::user()->status == "Active" ? "checked" : "" !!}>
-                    <label class="custom-control-label" for="customCheck1">Active</label>
+                    <input type="checkbox" name="status" class="custom-control-input myaccountstatus" id="customCheck2" {!! Auth::user()->status == "Active" ? "checked" : "" !!}>
+                    <label class="custom-control-label" for="customCheck2">Active</label>
                   </div>
                 </div>
               </div>
@@ -57,7 +57,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary btnUpdate" data-loading-text="<i class='fas fa-circle-notch fa-spin'></i> Saving...">Update</button>
-        <button type="button" class="btn btn-danger btnResetPassword" data-loading-text="<i class='fas fa-circle-notch fa-spin'></i> Resetting...">Reset password</button>
+        <button type="button" class="btn btn-danger btnResetMyaccountPassword" data-loading-text="<i class='fas fa-circle-notch fa-spin'></i> Resetting...">Change password</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>

@@ -94,6 +94,11 @@ class Users extends Controller
 		$this->return = $user ? ["success" => true, "message" => "New password : ".$this->password] : ["success" => false, "message" => "Reset failed"];
 		return response()->json($this->return);
 	}
+    public function changePassword(Request $request, $id) {
+        $user = User::whereId($id)->update(["password" => bcrypt($request["newpassword"])]);
+        $this->return = $user ? ["success" => true, "message" => "Password updated"] : ["success" => false, "message" => "Updated failed"];
+        return response()->json($this->return);
+    }
 
 	public function updateMyaccount(Request $request) {
 		$user = User::whereId(Auth::user()->id)->update(["first_name" => $request["first_name"], 

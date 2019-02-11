@@ -68,6 +68,7 @@
 		});
 
 		$(document).on('click','.myaccount', function() {
+			$('.modal-title').html(`{{Auth::user()->first_name}}, {{Auth::user()->last_name}} <br> <span class="badge badge-pill badge-success">{{Auth::user()->status}}</span>`)
 			$("#myaccountModal").modal("show");
 		});
 
@@ -84,7 +85,7 @@
 				var formData = that.serializeArray();
 					formData.map(val => {
 						if(val.name == "status") {
-							payload[val.name] = $("#myaccountForm .status").prop('checked') ? "Active" : "Inactive";
+							payload[val.name] = $("#myaccountForm .myaccountstatus").prop('checked') ? "Active" : "Inactive";
 						} else {
 							payload[val.name] = val.value;
 						}
@@ -111,6 +112,66 @@
 				})
 
 			}
+		})
+		$(document).on("click",'.btnResetMyaccountPassword', function() {
+			swal({
+				text: "Are you sure you want to change your password?",
+				icon: "warning",
+				buttons: [
+					"No",
+					{
+						text:"Yes",
+						closeModal: false
+					}
+				],
+				dangerMode:true,
+			}).then(yes => {
+				if(yes) {
+					swal({
+					  text: 'Input new password',
+					  content: {
+					    element: "input",
+					    attributes: {
+					      type: "password",
+					      className: 'form-control',
+					    },
+					  },
+					  buttons: [
+					  	"Cancel",
+					  	{
+					  		text: "Proceed",
+					  		closeModal:false
+					  	}
+					  ],
+					  closeOnClickOutside: false,
+					}).then(proceed => {
+					  	if(proceed) {
+					  		$.ajax({
+								url : "{{route('api.users-changepassword','1')}}".replace('1',"{{Auth::user()->id}}"),
+								method: "patch",
+								cache:false,
+								data: {_token:token, newpassword:proceed},
+								success: function(res) {
+									if(res.success) {
+										return swal({
+											text: res.message,
+											icon: "success"
+										}).then(ok => {
+											window.location.reload();
+										})
+									} 
+									return swal({
+										text:res.message,
+										icon:"warning"
+									})
+								}
+							})
+					  	}
+
+					})
+					
+				}
+			});
 		})
 	</script>
 		@yield('script')

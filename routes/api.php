@@ -37,6 +37,7 @@ Route::group(['middleware' => 'isLogin'], function(){
 	Route::put('/users/{id}','Admin\Users@update')->name('api.users-update');
 	Route::delete('/users/{id}','Admin\Users@delete')->name('api.users-delete');
 	Route::patch('/users/reset-password/{id}','Admin\Users@resetPassword')->name('api.users-resetpassword');
+	Route::patch('/users/change-password/{id}','Admin\Users@changePassword')->name('api.users-changepassword');
 	Route::put('/users/myaccount/update', 'Admin\Users@updateMyaccount')->name('api.users-updatemyaccount');
 
 	//dashboard
